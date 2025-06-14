@@ -3,11 +3,15 @@
 import { useChat } from 'ai/react';
 import AITerminal from './AITerminal';
 import { Message } from 'ai'; // Import Message type
+import { VisibilitySelector } from './VisibilitySelector'; // Import VisibilitySelector
 
 function MyChat() {
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     api: '/api/chat', // New API route for chat
   });
+
+  // Assuming a chat ID is available, for demonstration purposes
+  const chatId = 'some-chat-id';
 
   const handleTerminalCommand = (command: string) => {
     console.log('Terminal command received:', command);
@@ -20,6 +24,9 @@ function MyChat() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '16px' }}>
+          <VisibilitySelector chatId={chatId} selectedVisibilityType="private" />
+        </div>
         {messages.map((message: Message) => (
           <div key={message.id} style={{ marginBottom: '8px' }}>
             <strong>{message.role}:</strong> {message.content}
