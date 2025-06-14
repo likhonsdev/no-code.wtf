@@ -4,6 +4,9 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { SuggestedActions } from "@/components/suggested-actions"
+import type { UseChatHelpers } from "@ai-sdk/react"
+import type { VisibilityType } from "@/components/visibility-selector"
 
 const promptInputVariants = cva("flex flex-col gap-0", {
   variants: {
@@ -27,10 +30,13 @@ interface PromptInputProps
   value?: string
   onValueChange?: (value: string) => void
   onSubmit?: () => void
+  chatId?: string
+  append?: UseChatHelpers["append"]
+  selectedVisibilityType?: VisibilityType
 }
 
 const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
-  ({ className, variant, size, isLoading, value, onValueChange, onSubmit, children, ...props }, ref) => {
+  ({ className, variant, size, isLoading, value, onValueChange, onSubmit, children, chatId, append, selectedVisibilityType, ...props }, ref) => {
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -47,6 +53,15 @@ const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
         {...props}
       >
         {children}
+        {value === "" && append && chatId && selectedVisibilityType && (
+          <div className="px-4 pb-4">
+            <SuggestedActions
+              chatId={chatId}
+              append={append}
+              selectedVisibilityType={selectedVisibilityType}
+            />
+          </div>
+        )}
       </div>
     )
   }
