@@ -5,9 +5,6 @@ const nextConfig = {
   images: {
     domains: ['media.giphy.com'], // Add any other image domains you need
   },
-  experimental: {
-    serverActions: true,
-  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
